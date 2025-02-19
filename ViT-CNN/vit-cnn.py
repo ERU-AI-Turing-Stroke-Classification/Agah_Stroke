@@ -80,16 +80,28 @@ class Transformer(nn.Module):
 
         return self.norm(x)
 
-class ViT(nn.Module):
-    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool = 'cls', channels = 3, dim_head = 64, dropout = 0., emb_dropout = 0.):
+class HybridViT(nn.Module):
+    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool = 'cls', channels = 1, dim_head = 64, dropout = 0., emb_dropout = 0.):
         super().__init__()
+
+        self.cnn_feature_extractor = nn.Sequential(
+            nn.Conv2d(in_channels = channels,out_channels=64,kernel_size=3,stride=1,padding=0),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=64,out_channels=128,kernel_size=3,stride=1,padding=0),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=128,out_channels=256,kernel_size=3,stride=1,padding=0),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2,stride=2)
+        )
+        self.cnn_out_channels = 256
+
         image_height, image_width = pair(image_size)
         patch_height, patch_width = pair(patch_size)
 
         assert image_height % patch_height == 0 and image_width % patch_width == 0, 'Image dimensions must be divisible by the patch size.'
 
         num_patches = (image_height // patch_height) * (image_width // patch_width)
-        patch_dim = channels * patch_height * patch_width
+        patch_dim = self.cnn_out_channels * patch_height * patch_width
         assert pool in {'cls', 'mean'}, 'pool type must be either cls (cls token) or mean (mean pooling)'
 
         self.to_patch_embedding = nn.Sequential(
@@ -111,7 +123,10 @@ class ViT(nn.Module):
         self.mlp_head = nn.Linear(dim, num_classes)
 
     def forward(self, img):
-        x = self.to_patch_embedding(img)
+
+        x = self.cnn_feature_extractor(img)
+
+        x = self.to_patch_embedding(x)
         b, n, _ = x.shape
 
         cls_tokens = repeat(self.cls_token, '1 1 d -> b 1 d', b = b)

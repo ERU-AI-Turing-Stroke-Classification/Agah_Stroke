@@ -1,11 +1,11 @@
 import torch
 from torch import nn
-import gc
+from torchvision import transforms,datasets
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
-from torchvision import datasets,transforms
 from torch import optim
 import os
+import gc
 
 # helpers
 
@@ -83,28 +83,16 @@ class Transformer(nn.Module):
 
         return self.norm(x)
 
-class HybridViT(nn.Module):
-    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool = 'cls', channels = 1, dim_head = 64, dropout = 0., emb_dropout = 0.):
+class ViT(nn.Module):
+    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool = 'cls', channels = 3, dim_head = 64, dropout = 0., emb_dropout = 0.):
         super().__init__()
-
-        self.cnn_feature_extractor = nn.Sequential(
-            nn.Conv2d(in_channels = channels,out_channels=64,kernel_size=3,stride=1,padding=0),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=64,out_channels=128,kernel_size=3,stride=1,padding=0),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=128,out_channels=256,kernel_size=3,stride=1,padding=0),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2,stride=2)
-        )
-        self.cnn_out_channels = 256
-
         image_height, image_width = pair(image_size)
         patch_height, patch_width = pair(patch_size)
 
         assert image_height % patch_height == 0 and image_width % patch_width == 0, 'Image dimensions must be divisible by the patch size.'
 
         num_patches = (image_height // patch_height) * (image_width // patch_width)
-        patch_dim = self.cnn_out_channels * patch_height * patch_width
+        patch_dim = channels * patch_height * patch_width
         assert pool in {'cls', 'mean'}, 'pool type must be either cls (cls token) or mean (mean pooling)'
 
         self.to_patch_embedding = nn.Sequential(
@@ -126,13 +114,7 @@ class HybridViT(nn.Module):
         self.mlp_head = nn.Linear(dim, num_classes)
 
     def forward(self, img):
-
-        #print("Image size:", img.shape)
-
-        x = self.cnn_feature_extractor(img)
-        #print("CNN output size:", x.shape)
-
-        x = self.to_patch_embedding(x)
+        x = self.to_patch_embedding(img)
         b, n, _ = x.shape
 
         cls_tokens = repeat(self.cls_token, '1 1 d -> b 1 d', b = b)
@@ -148,7 +130,6 @@ class HybridViT(nn.Module):
         return self.mlp_head(x)
 
 
-
 class Trainer:
     def __init__(self, model, train_loader, val_loader, device, criterion, optimizer):
         self.model = model.to(device)
@@ -158,7 +139,7 @@ class Trainer:
         self.criterion = criterion
         self.optimizer = optimizer
         self.best_val_acc = 0.0
-        self.save_path = "C:\\Users\\Agah\\PycharmProjects\\Agah-StrokeClassification\\ViT-CNN\\runs\\best_model.pth"
+        self.save_path = "C:\\Users\\Agah\\PycharmProjects\\Agah-StrokeClassification\\ViT\\runs\\best_model.pth"
         self.start_epoch = 0
 
         self.load_best_model()
@@ -259,42 +240,36 @@ if __name__ == '__main__':
     torch.cuda.empty_cache()
     gc.collect()
 
-    transform = transforms.Compose([
-        transforms.Grayscale(num_output_channels=1),
-        transforms.Resize((326,326)),
-        transforms.ToTensor()
-    ])
+    transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1),transforms.ToTensor()])
 
-    train_dataset = datasets.ImageFolder("C:\\Users\\Agah\\Desktop\\son_veriler\\train",transform=transform)
-    test_dataset = datasets.ImageFolder("C:\\Users\\Agah\\Desktop\\son_veriler\\test",transform=transform)
-    val_dataset = datasets.ImageFolder("C:\\Users\\Agah\\Desktop\\son_veriler\\validation",transform=transform)
+    train_dataset = datasets.ImageFolder("C:\\Users\\Agah\\Desktop\\son_veriler\\train", transform = transform)
+    test_dataset = datasets.ImageFolder("C:\\Users\\Agah\\Desktop\\son_veriler\\test", transform = transform)
+    val_dataset = datasets.ImageFolder("C:\\Users\\Agah\\Desktop\\son_veriler\\validation", transform=transform)
 
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = 4, shuffle = True)
-    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=4, shuffle=False)
-    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=4, shuffle=False)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=4,shuffle=True)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=4,shuffle=False)
+    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=4,shuffle=False)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    model = HybridViT(
-        image_size=160,
-        patch_size=16,
-        num_classes=1,
-        dim=1024,
-        depth=18,
-        heads=12,
-        mlp_dim=4096,
-        pool='cls',
-        channels=1,
-        dim_head=64,
-        dropout=0.1,
-        emb_dropout=0.1
-    ).to(device)
+    model = ViT(image_size=320,
+                patch_size=16,
+                num_classes=1,
+                dim=1024,
+                depth=12,
+                heads=12,
+                mlp_dim=3584,
+                pool='cls',
+                channels=1,
+                dim_head=64,
+                dropout=0.1,
+                emb_dropout=0.1).to(device)
 
     criterion = nn.BCEWithLogitsLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
-
-    num_epochs = 30
+    optimizer = optim.Adam(model.parameters(),lr = 0.005)
 
     trainer = Trainer(model, train_loader, val_loader, device, criterion, optimizer)
 
+    num_epochs = 30
     trainer.train(num_epochs)
+

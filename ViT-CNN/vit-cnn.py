@@ -255,6 +255,8 @@ class Trainer:
             print("No saved model found, training from scratch")
 
 
+
+
 if __name__ == '__main__':
     torch.cuda.empty_cache()
     gc.collect()

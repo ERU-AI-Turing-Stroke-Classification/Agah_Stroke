@@ -231,7 +231,7 @@ class Trainer:
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             self.start_epoch = checkpoint['epoch']
             self.best_val_acc = checkpoint['best_val_acc']
-            print(f"Best model loaded. Continuing from epoch {self.start_epoch}")
+            print(f"Best model loaded. Proceeding from epoch {self.start_epoch}")
         else:
             print("No saved model found, training from scratch")
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
                 emb_dropout=0.1).to(device)
 
     criterion = nn.BCEWithLogitsLoss()
-    optimizer = optim.Adam(model.parameters(),lr = 0.005)
+    optimizer = optim.Adam(model.parameters(),lr = 0.001)
 
     trainer = Trainer(model, train_loader, val_loader, device, criterion, optimizer)
 

@@ -1,6 +1,3 @@
-import math
-import torch.utils.model_zoo as model_zoo
-
 import os
 import torch
 import torch.nn as nn
@@ -10,13 +7,14 @@ import torchvision.datasets as datasets
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from torchvision.models import resnet50
+import optuna
 
 # Google Colab için GPU kullanımı
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # Veri seti yolunu belirle
-data_dir = "/content/dataset"
+data_dir = "/content/drive/MyDrive/stroke2/son_veriler2"
 
 # Veri ön işleme
 transform = transforms.Compose([
@@ -28,52 +26,34 @@ transform = transforms.Compose([
 
 # Veri setini yükle
 train_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=transform)
-val_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "val"), transform=transform)
+val_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "validation"), transform=transform)
 
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=2)
-val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=2)
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=2)
+val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False, num_workers=2)
 
-_all_ = ['ResNet', 'resnet18_cbam', 'resnet34_cbam', 'resnet50_cbam', 'resnet101_cbam',
-         'resnet152_cbam']
-
-model_urls = {
-    'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
-    'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
-    'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
-    'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
-    'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
-}
-
-
-def conv3x3(in_planes, out_planes, stride=1):
-    "3x3 convolution with padding"
-    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
-                     padding=1, bias=False)
-
-
+# CBAM modülü
 class ChannelAttention(nn.Module):
-    def _init_(self, in_planes, ratio=16):
-        super(ChannelAttention, self)._init_()
+    def __init__(self, in_planes, ratio=16):
+        super(ChannelAttention, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.max_pool = nn.AdaptiveMaxPool2d(1)
 
-        self.fc = nn.Sequential(nn.Conv2d(in_planes, in_planes // 16, 1, bias=False),
-                                nn.ReLU(),
-                                nn.Conv2d(in_planes // 16, in_planes, 1, bias=False))
+        self.fc = nn.Sequential(
+            nn.Conv2d(in_planes, in_planes // ratio, 1, bias=False),
+            nn.ReLU(),
+            nn.Conv2d(in_planes // ratio, in_planes, 1, bias=False)
+        )
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         avg_out = self.fc(self.avg_pool(x))
         max_out = self.fc(self.max_pool(x))
-        out = avg_out + max_out
-        return self.sigmoid(out)
-
+        return self.sigmoid(avg_out + max_out)
 
 class SpatialAttention(nn.Module):
-    def _init_(self, kernel_size=7):
-        super(SpatialAttention, self)._init_()
-
-        self.conv1 = nn.Conv2d(2, 1, kernel_size, padding=kernel_size // 2, bias=False)
+    def __init__(self, kernel_size=7):
+        super(SpatialAttention, self).__init__()
+        self.conv1 = nn.Conv2d(2, 1, kernel_size, padding=kernel_size//2, bias=False)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
@@ -83,169 +63,131 @@ class SpatialAttention(nn.Module):
         x = self.conv1(x)
         return self.sigmoid(x)
 
-
-class BasicBlock(nn.Module):
-    expansion = 1
-
-    def _init_(self, inplanes, planes, stride=1, downsample=None):
-        super(BasicBlock, self)._init_()
-        self.conv1 = conv3x3(inplanes, planes, stride)
-        self.bn1 = nn.BatchNorm2d(planes)
-        self.relu = nn.ReLU(inplace=True)
-        self.conv2 = conv3x3(planes, planes)
-        self.bn2 = nn.BatchNorm2d(planes)
-
-        self.ca = ChannelAttention(planes)
-        self.sa = SpatialAttention()
-
-        self.downsample = downsample
-        self.stride = stride
+class CBAM(nn.Module):
+    def __init__(self, in_planes, ratio=16, kernel_size=7):
+        super(CBAM, self).__init__()
+        self.ca = ChannelAttention(in_planes, ratio)
+        self.sa = SpatialAttention(kernel_size)
 
     def forward(self, x):
-        residual = x
+        x = x * self.ca(x)
+        x = x * self.sa(x)
+        return x
 
-        out = self.conv1(x)
-        out = self.bn1(out)
-        out = self.relu(out)
+# CBAM'lı ResNet50 modelini yükle
+class ResNet50_CBAM(nn.Module):
+    def __init__(self, num_classes=2):
+        super(ResNet50_CBAM, self).__init__()
+        self.model = resnet50(weights='IMAGENET1K_V2')
+        self.model.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)  # Siyah-beyaz için
+        self.model.fc = nn.Linear(self.model.fc.in_features, num_classes)
 
-        out = self.conv2(out)
-        out = self.bn2(out)
-
-        out = self.ca(out) * out
-        out = self.sa(out) * out
-
-        if self.downsample is not None:
-            residual = self.downsample(x)
-
-        out += residual
-        out = self.relu(out)
-
-        return out
-
-
-class Bottleneck(nn.Module):
-    expansion = 4
-
-    def _init_(self, inplanes, planes, stride=1, downsample=None):
-        super(Bottleneck, self)._init_()
-        self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(planes)
-        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
-                               padding=1, bias=False)
-        self.bn2 = nn.BatchNorm2d(planes)
-        self.conv3 = nn.Conv2d(planes, planes * 4, kernel_size=1, bias=False)
-        self.bn3 = nn.BatchNorm2d(planes * 4)
-        self.relu = nn.ReLU(inplace=True)
-
-        self.ca = ChannelAttention(planes * 4)
-        self.sa = SpatialAttention()
-
-        self.downsample = downsample
-        self.stride = stride
+        # CBAM ekleyelim
+        self.cbam1 = CBAM(256)  # İlk ResNet bloğu çıkışı
+        self.cbam2 = CBAM(512)  # İkinci ResNet bloğu çıkışı
+        self.cbam3 = CBAM(1024) # Üçüncü ResNet bloğu çıkışı
 
     def forward(self, x):
-        residual = x
+        x = self.model.conv1(x)
+        x = self.model.bn1(x)
+        x = self.model.relu(x)
+        x = self.model.maxpool(x)
 
-        out = self.conv1(x)
-        out = self.bn1(out)
-        out = self.relu(out)
+        x = self.model.layer1(x)
+        x = self.cbam1(x)  # CBAM ekledik
 
-        out = self.conv2(out)
-        out = self.bn2(out)
-        out = self.relu(out)
+        x = self.model.layer2(x)
+        x = self.cbam2(x)
 
-        out = self.conv3(out)
-        out = self.bn3(out)
+        x = self.model.layer3(x)
+        x = self.cbam3(x)
 
-        out = self.ca(out) * out
-        out = self.sa(out) * out
-
-        if self.downsample is not None:
-            residual = self.downsample(x)
-
-        out += residual
-        out = self.relu(out)
-
-        return out
-
-
-class ResNet(nn.Module):
-
-    def _init_(self, block, layers, num_classes=1):
-        self.inplanes = 64
-        super(ResNet, self)._init_()
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
-                               bias=False)
-        self.bn1 = nn.BatchNorm2d(64)
-        self.relu = nn.ReLU(inplace=True)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self._make_layer(block, 64, layers[0])
-        self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
-        self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
-        self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Sequential(
-            nn.Linear(512 * block.expansion, 256),
-            nn.LeakyReLU(),  # İlk FC katmanında LeakyReLU
-            nn.Linear(256, 128),
-            nn.ELU(),  # Orta FC katmanında ELU
-            nn.Linear(128, num_classes),
-            nn.Sigmoid()  # Çıkış katmanında Sigmoid (Binary Classification için)
-        )
-
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2. / n))
-            elif isinstance(m, nn.BatchNorm2d):
-                m.weight.data.fill_(1)
-                m.bias.data.zero_()
-
-    def _make_layer(self, block, planes, blocks, stride=1):
-        downsample = None
-        if stride != 1 or self.inplanes != planes * block.expansion:
-            downsample = nn.Sequential(
-                nn.Conv2d(self.inplanes, planes * block.expansion,
-                          kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(planes * block.expansion),
-            )
-
-        layers = []
-        layers.append(block(self.inplanes, planes, stride, downsample))
-        self.inplanes = planes * block.expansion
-        for i in range(1, blocks):
-            layers.append(block(self.inplanes, planes))
-
-        return nn.Sequential(*layers)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
-
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = self.layer4(x)
-
-        x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
-        x = self.fc(x)
-
+        x = self.model.layer4(x)
+        x = self.model.avgpool(x)
+        x = torch.flatten(x, 1)
+        x = self.model.fc(x)
         return x
 
 
-def resnet50_cbam(pretrained=True, **kwargs):
-    """Constructs a ResNet-50 model.
+def objective(trial):
+    # Hiperparametreler
+    lr = trial.suggest_loguniform('lr', 1e-5, 1e-4, 1e-3, 1e-2)  # Learning rate
+    batch_size = trial.suggest_int('batch_size', 32, 64, 128)  # Batch size
+    dropout_rate = trial.suggest_uniform('dropout_rate', 0.1, 0.2, 0.3, 0.4, 0.5)  # Dropout rate
+    optimizer_name = trial.suggest_categorical('optimizer', ['Adam', 'AdamW', 'SGD'])  # Optimizer türü
 
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-    """
-    model = ResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
-    if pretrained:
-        pretrained_state_dict = model_zoo.load_url(model_urls['resnet50'])
-        now_state_dict = model.state_dict()
-        now_state_dict.update(pretrained_state_dict)
-        model.load_state_dict(now_state_dict)
-    return model
+    # Modeli başlat
+    model = ResNet50_CBAM().to(device)
+
+    # Dropout ekleme
+    if dropout_rate > 0:
+        model.model.fc = nn.Sequential(
+            nn.Dropout(dropout_rate),
+            nn.Linear(model.model.fc.in_features, 2)  # Çıktı sınıf sayısı
+        )
+
+    # Optimizer seçimi
+    if optimizer_name == 'Adam':
+        optimizer = optim.AdamW(model.parameters(), lr=lr)
+    elif optimizer_name == 'AdamW':
+        optimizer = optim.AdamW(model.parameters(), lr=lr)
+    else:
+        optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+
+    # DataLoader ayarları
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+
+    # Kayıp fonksiyonu
+    criterion = nn.CrossEntropyLoss()
+
+    # Model eğitimi
+    num_epochs = 15  # Optimizasyon için daha kısa epoch sayısı
+    best_val_acc = 0
+
+    for epoch in range(num_epochs):
+        model.train()
+        train_loss, correct, total = 0, 0, 0
+        for images, labels in tqdm(train_loader):
+            images, labels = images.to(device), labels.to(device)
+            optimizer.zero_grad()
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+
+            train_loss += loss.item()
+            _, predicted = outputs.max(1)
+            total += labels.size(0)
+            correct += predicted.eq(labels).sum().item()
+
+        # Validation
+        model.eval()
+        correct, total, val_loss = 0, 0, 0
+        with torch.no_grad():
+            for images, labels in val_loader:
+                images, labels = images.to(device), labels.to(device)
+                outputs = model(images)
+                loss = criterion(outputs, labels)
+                val_loss += loss.item()
+                _, predicted = outputs.max(1)
+                total += labels.size(0)
+                correct += predicted.eq(labels).sum().item()
+
+        val_acc = 100. * correct / total
+        print(f"Epoch {epoch + 1}: Validation Accuracy: {val_acc:.2f}%")
+
+        best_val_acc = max(best_val_acc, val_acc)
+
+    return best_val_acc  # Optuna'ya optimize edilecek değer olarak validation accuracy döndürüyoruz
+
+
+# Optuna çalışma alanı (study) oluşturma
+study = optuna.create_study(direction="maximize")  # Hedef: validation accuracy'i maximize etmek
+study.optimize(objective, n_trials=50)  # 50 farklı deneme yap
+
+# En iyi hiperparametreyi yazdır
+print("Best trial:")
+best_trial = study.best_trial
+print(f"  Value: {best_trial.value}")
+print(f"  Params: {best_trial.params}")

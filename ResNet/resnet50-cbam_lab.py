@@ -59,16 +59,19 @@ class CBAM(nn.Module):
 
 
 def objective(trial):
+    kernel_hight = trial.suggest_int('kernel_hight', 1, 10, step=2)
+    kernel_width = trial.suggest_int('kernel_width', 1, 10, step=2)
+    sigma = trial.suggest_float('sigma', 0.01, 10.0)
 
-    act_f = trial.suggest_categorical('activation', ['ReLU', 'LeakyReLU', 'Swish','GELU'])
-    momentum = trial.suggest_uniform('momentum', 0.8, 0.99)
+    print(f"Trial {trial.number}: Kernel hight = {kernel_hight}, Kernel width = {kernel_width}, Sigma = {sigma}")
 
-    data_dir = "/content/drive/MyDrive/stroke2/son_veriler2"
+    data_dir = "/home/eruai/Pictures/son_veriler2"
+    #data_dir = r"C:\Users\Agah\Desktop\son_veriler"
 
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        transforms.GaussianBlur(kernel_size=(5, 9), sigma=(0.1, 2.0)),
+        transforms.GaussianBlur(kernel_size=(kernel_width, kernel_hight), sigma=sigma),
         transforms.Normalize(mean=[0.5], std=[0.5])
     ])
 
@@ -79,7 +82,7 @@ def objective(trial):
     val_loader = DataLoader(val_dataset, batch_size=36, shuffle=False, num_workers=2)
 
     class ResNet50_CBAM(nn.Module):
-        def __init__(self, num_classes=2,activation_function=act_f):
+        def __init__(self, num_classes=2):
             super(ResNet50_CBAM, self).__init__()
             self.model = resnet50(weights='IMAGENET1K_V2')
             self.model.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
@@ -92,14 +95,7 @@ def objective(trial):
             self.cbam2 = CBAM(512)
             self.cbam3 = CBAM(1024)
 
-            if activation_function == 'ReLU':
-                self.activation = nn.ReLU()
-            elif activation_function == 'LeakyReLU':
-                self.activation = nn.LeakyReLU()
-            elif activation_function == 'Swish':
-                self.activation = nn.SiLU()
-            elif activation_function == 'GELU':
-                self.activation = nn.GELU()
+            self.activation = nn.Mish()
 
         def forward(self, x):
             x = self.model.conv1(x)
@@ -121,11 +117,7 @@ def objective(trial):
 
     model = ResNet50_CBAM().to(device)
 
-
-
-
-    optimizer = optim.SGD(model.parameters(), lr=0.005608814819228252, momentum=momentum)
-
+    optimizer = optim.SGD(model.parameters(), lr=0.005608814819228252, momentum= 0.9211762372405828)
 
     criterion = nn.CrossEntropyLoss()
 
@@ -170,10 +162,9 @@ def objective(trial):
     return best_val_acc
 
 
-
 if __name__ == '__main__':
     study = optuna.create_study(direction="maximize")
-    study.optimize(objective, n_trials=30)
+    study.optimize(objective, n_trials=75)
 
     print("Best trial:")
     best_trial = study.best_trial

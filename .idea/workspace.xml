@@ -5,16 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc9700a3-9668-41eb-b25e-33234c9d0c0b" name="Changes" comment=".">
-      <change afterPath="$PROJECT_DIR$/Data_Manipulation/Noise.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DenseNet/DenseNet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResNet/resnet50.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VGG-19/best_model(1).pth" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VGG-19/model_checkpoint.pth" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VGG-19/vgg-19.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ResNet/demo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ResNet/graphics.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ResNet/resnet50-cbam_lab.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ResNet/resnet50-cbam_tahsin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EfficientNet/B4.py" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/B2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViT-CNN/vit-cnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/ViT-CNN/vit-cnn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViT/vit.py" beforeDir="false" afterPath="$PROJECT_DIR$/ViT/vit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data_Manipulation/train_test_val_split.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Manipulation/train_test_val_split.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data_Manipulation/transportation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Manipulation/transportation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ROI/roi.py" beforeDir="false" afterPath="$PROJECT_DIR$/ROI/roi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResNet/resnet50-cbam.py" beforeDir="false" afterPath="$PROJECT_DIR$/ResNet/resnet50-cbam.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VGG-19/vgg-19.py" beforeDir="false" afterPath="$PROJECT_DIR$/VGG-19/vgg-19.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,11 +58,19 @@
   &quot;keyToString&quot;: {
     &quot;Python.DenseNet.executor&quot;: &quot;Run&quot;,
     &quot;Python.Noise.executor&quot;: &quot;Run&quot;,
+    &quot;Python.demo.executor&quot;: &quot;Run&quot;,
+    &quot;Python.graphics.executor&quot;: &quot;Run&quot;,
     &quot;Python.reshaping.executor&quot;: &quot;Run&quot;,
+    &quot;Python.resnet50-cbam.executor&quot;: &quot;Run&quot;,
+    &quot;Python.resnet50-cbam_lab.executor&quot;: &quot;Run&quot;,
+    &quot;Python.resnet50-cbam_tahsin.executor&quot;: &quot;Run&quot;,
     &quot;Python.resnet50.executor&quot;: &quot;Run&quot;,
+    &quot;Python.roi.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train_test_val_split.executor&quot;: &quot;Run&quot;,
     &quot;Python.transportation.executor&quot;: &quot;Run&quot;,
     &quot;Python.turning.executor&quot;: &quot;Run&quot;,
     &quot;Python.vgg-19.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vgg-19_tahsin.executor&quot;: &quot;Run&quot;,
     &quot;Python.vit-cnn.executor&quot;: &quot;Run&quot;,
     &quot;Python.vit.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -82,6 +90,8 @@
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\VGG-19" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\ResNet\Teknofest_21" />
+      <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\ResNet" />
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\VGG-19" />
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\DenseNet" />
     </key>
@@ -121,6 +131,12 @@
       <workItem from="1741507018541" duration="14612000" />
       <workItem from="1741864150051" duration="9183000" />
       <workItem from="1741888409225" duration="2698000" />
+      <workItem from="1742126153931" duration="102717000" />
+      <workItem from="1742717272909" duration="13272000" />
+      <workItem from="1742754434507" duration="6410000" />
+      <workItem from="1742820624638" duration="998000" />
+      <workItem from="1742847136651" duration="12000" />
+      <workItem from="1745304485066" duration="3296000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <option name="closed" value="true" />
@@ -141,14 +157,22 @@
     <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vit_cnn.coverage" NAME="vit-cnn Coverage Results" MODIFIED="1740261058621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT-CNN" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$DenseNet.coverage" NAME="DenseNet Coverage Results" MODIFIED="1741254982172" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DenseNet" />
-    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$turning.coverage" NAME="turning Coverage Results" MODIFIED="1740058303606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50_cbam.coverage" NAME="resnet50-cbam Coverage Results" MODIFIED="1742392451945" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$Noise.coverage" NAME="Noise Coverage Results" MODIFIED="1741022614125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
-    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50.coverage" NAME="resnet50 Coverage Results" MODIFIED="1741262995216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
-    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$transportation.coverage" NAME="transportation Coverage Results" MODIFIED="1740075428370" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
-    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vit.coverage" NAME="vit Coverage Results" MODIFIED="1740654344937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$graphics.coverage" NAME="graphics Coverage Results" MODIFIED="1742580512805" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50_cbam_lab.coverage" NAME="resnet50-cbam_lab Coverage Results" MODIFIED="1742490014388" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$demo.coverage" NAME="demo Coverage Results" MODIFIED="1742634626300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$reshaping.coverage" NAME="reshaping Coverage Results" MODIFIED="1740054116309" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
-    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vgg_19.coverage" NAME="vgg-19 Coverage Results" MODIFIED="1741871972707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/VGG-19" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vit_cnn.coverage" NAME="vit-cnn Coverage Results" MODIFIED="1740261058621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT-CNN" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$turning.coverage" NAME="turning Coverage Results" MODIFIED="1740058303606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50.coverage" NAME="resnet50 Coverage Results" MODIFIED="1741262995216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$train_test_val_split.coverage" NAME="train_test_val_split Coverage Results" MODIFIED="1742648539091" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vit.coverage" NAME="vit Coverage Results" MODIFIED="1740654344937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$transportation.coverage" NAME="transportation Coverage Results" MODIFIED="1742647690713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vgg_19_tahsin.coverage" NAME="vgg-19_tahsin Coverage Results" MODIFIED="1742137194551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/VGG-19" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$roi.coverage" NAME="roi Coverage Results" MODIFIED="1742671939854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ROI" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50_cbam_tahsin.coverage" NAME="resnet50-cbam_tahsin Coverage Results" MODIFIED="1742821597667" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
+    <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vgg_19.coverage" NAME="vgg-19 Coverage Results" MODIFIED="1742647249997" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/VGG-19" />
   </component>
 </project>

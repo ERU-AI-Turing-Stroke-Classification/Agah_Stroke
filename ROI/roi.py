@@ -6,8 +6,8 @@ if __name__ == '__main__':
 
     model = YOLO(r"C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\ROI\runs\detect\train5\weights\best.pt")
 
-    test_image_folder = r"C:\Users\Agah\Desktop\İnme Veri Seti\İnme Yok_kronik süreç_diğer Veri Set_PNG\İnme Yok_kronik süreç_diğer Veri Set_PNG"
-    output_cropped_folder = r"C:\Users\Agah\Desktop\kronik-surec_kirpilmis"
+    test_image_folder = r"C:\Users\Agah\Desktop\deneme_teknofest_ayrilmis\validation\inme_yok"
+    output_cropped_folder = r"C:\Users\Agah\Desktop\DenemeTeknofestRoi\validation\inme_yok"
 
     os.makedirs(output_cropped_folder, exist_ok=True)
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
             x_min, y_min, x_max, y_max = map(int, box.tolist())
             cropped_image = image[y_min:y_max, x_min:x_max]
 
-            output_path = os.path.join(output_cropped_folder, f"{os.path.splitext(image_name)[0]}_crop{i}.png")
+            output_path = os.path.join(output_cropped_folder, f"{os.path.splitext(image_name)[0]}.png")
             cv2.imwrite(output_path, cropped_image)
             print(f"Kırpılan görüntü kaydedildi: {output_path}")
 

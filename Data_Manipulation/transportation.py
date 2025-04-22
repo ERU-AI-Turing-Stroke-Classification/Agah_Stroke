@@ -1,12 +1,23 @@
 import os
 import shutil
+import random
 
-dir1 = r"C:\Users\Agah\Desktop\son_veriler\test\iskemik_inme_yok_dondurulmus"
-dir2 = r"C:\Users\Agah\Desktop\dondurulmus_2ve3\test_inme_yok"
 
-for filename in os.listdir(dir1):
-    if not filename.endswith("0.jpg"):
-        source = os.path.join(dir1, filename)
-        destination = os.path.join(dir2, filename)
-        shutil.move(source, destination)
-        print(f"Taşındı: {filename}")
+source_dir = r"C:\Users\Agah\Desktop\İnmeYok_kroniksüreç_diğerVeriSet_PNG"  # Mevcut görüntülerin olduğu klasör
+target_dir = r"C:\Users\Agah\Desktop\İnmeYok_diger_yarisi"  # Taşınacak görüntülerin yeni klasörü
+
+# Hedef klasör yoksa oluştur
+os.makedirs(target_dir, exist_ok=True)
+
+# Kaynak klasördeki tüm dosyaları al
+files = [f for f in os.listdir(source_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
+
+# Dosyaların yarısını rastgele seç
+selected_files = random.sample(files, len(files) // 2)
+
+for file in selected_files:
+    src_path = os.path.join(source_dir, file)
+    dest_path = os.path.join(target_dir, file)
+    shutil.move(src_path, dest_path)
+
+print(f"{len(selected_files)} dosya {target_dir} klasörüne taşındı.")

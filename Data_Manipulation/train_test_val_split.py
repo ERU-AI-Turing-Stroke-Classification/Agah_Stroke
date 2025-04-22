@@ -2,48 +2,48 @@ import os
 import shutil
 import random
 
+# Ana veri klasörü
+source_dir = r"C:\Users\Agah\Desktop\deneme_teknofest_veriler"  # Burada "inme_var" ve "inme_yok" klasörleri var
 
-data_dir = "C:\\Users\\Agah\\Desktop\\dondurulmus_veriler"
-output_dir = "C:\\Users\\Agah\\Desktop\\son_veriler"
-
+# Hedef klasörler
+output_dir = r"C:\Users\Agah\Desktop\deneme_teknofest"  # Yeni klasör oluşturulacak
 train_dir = os.path.join(output_dir, "train")
-test_dir = os.path.join(output_dir, "test")
 val_dir = os.path.join(output_dir, "validation")
+test_dir = os.path.join(output_dir, "test")
 
+# Eğitim, doğrulama ve test oranları
 train_ratio = 0.7
-test_ratio = 0.15
 val_ratio = 0.15
+test_ratio = 0.15
 
-for split in [train_dir, test_dir, val_dir]:
-    os.makedirs(split, exist_ok=True)
+# Klasörleri oluştur
+for category in ["inme_var", "inme_yok"]:
+    os.makedirs(os.path.join(train_dir, category), exist_ok=True)
+    os.makedirs(os.path.join(val_dir, category), exist_ok=True)
+    os.makedirs(os.path.join(test_dir, category), exist_ok=True)
 
-for class_name in os.listdir(data_dir):
-    class_path = os.path.join(data_dir, class_name)
+# Verileri her kategori için ayır
+for category in ["inme_var", "inme_yok"]:
+    category_path = os.path.join(source_dir, category)
+    images = [f for f in os.listdir(category_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
 
-    if not os.path.isdir(class_path):  # Eğer dosya ise atla
-        continue
+    random.shuffle(images)  # Rastgele sırala
 
-    images = [img for img in os.listdir(class_path) if img.endswith(('jpg', 'jpeg', 'png'))]  # Yalnızca resimleri al
+    train_count = int(len(images) * train_ratio)
+    val_count = int(len(images) * val_ratio)
 
+    train_files = images[:train_count]
+    val_files = images[train_count:train_count + val_count]
+    test_files = images[train_count + val_count:]
 
-    random.shuffle(images)
+    # Dosyaları yeni konumlarına taşı
+    for file in train_files:
+        shutil.move(os.path.join(category_path, file), os.path.join(train_dir, category, file))
 
-    train_split = int(len(images) * train_ratio)
-    val_split = int(len(images) * (train_ratio + val_ratio))
+    for file in val_files:
+        shutil.move(os.path.join(category_path, file), os.path.join(val_dir, category, file))
 
-    train_images = images[:train_split]
-    val_images = images[train_split:val_split]
-    test_images = images[val_split:]
+    for file in test_files:
+        shutil.move(os.path.join(category_path, file), os.path.join(test_dir, category, file))
 
-    os.makedirs(os.path.join(train_dir, class_name), exist_ok=True)
-    os.makedirs(os.path.join(val_dir, class_name), exist_ok=True)
-    os.makedirs(os.path.join(test_dir, class_name), exist_ok=True)
-
-    for img in train_images:
-        shutil.copy(os.path.join(class_path, img), os.path.join(train_dir, class_name, img))
-    for img in val_images:
-        shutil.copy(os.path.join(class_path, img), os.path.join(val_dir, class_name, img))
-    for img in test_images:
-        shutil.copy(os.path.join(class_path, img), os.path.join(test_dir, class_name, img))
-
-print("Veri seti başarıyla ayrıldı")
+print("Veriler başarıyla ayrıldı!")

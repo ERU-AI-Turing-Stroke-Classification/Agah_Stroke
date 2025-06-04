@@ -30,7 +30,6 @@ VALID_MODELS = (
     'efficientnet-l2'
 )
 
-
 class MBConvBlock(nn.Module):
     """Mobile Inverted Residual Bottleneck Block.
 
@@ -153,7 +152,7 @@ class EfficientNet(nn.Module):
         >>> import torch
         >>> from efficientnet_pytorch.model import EfficientNet
         >>> inputs = torch.rand(1, 3, 224, 224)
-        >>> model = EfficientNet.from_pretrained('efficientnet-b0')
+        >>> model = EfficientNet.from_pretrained('efficientnet-b7')
         >>> model.eval()
         >>> outputs = model(inputs)
     """
@@ -397,34 +396,213 @@ class EfficientNet(nn.Module):
 
 
 
+class Trainer:
+    def __init__(self, model, train_loader, val_loader, device, criterion, optimizer):
+        self.model = model.to(device)
+        self.train_loader = train_loader
+        self.val_loader = val_loader
+        self.device = device
+        self.criterion = criterion
+        self.optimizer = optimizer
+        self.best_val_acc = 0.0
+        self.save_path = r"C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\EfficientNet\runs"
+        self.start_epoch = 0
+
+        self.load_best_model()
+
+    def train(self, num_epochs):
+
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
+
+        for epoch in range(self.start_epoch, num_epochs):
+            print(f"Epoch {epoch + 1} started")
+            train_loss, train_acc = self.train_one_epoch()
+            val_loss, val_acc = self.validate()
+
+            print(f"Epoch [{epoch + 1}/{num_epochs}]")
+            print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")
+            print(f"Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.2f}%\n")
+
+            scheduler.step(val_loss)
+
+            self.save_best_model(val_acc, epoch, train_loss)
+
+            current_lr = optimizer.param_groups[0]['lr']
+            print(f"Current Learning Rate: {current_lr}")
+
+        print("Training is over")
+
+    def train_one_epoch(self):
+        self.model.train()
+        running_loss = 0.0
+        correct = 0
+        total = 0
+
+        for images, labels in self.train_loader:
+            images, labels = images.to(self.device), labels.to(self.device).float().unsqueeze(1)
+
+            self.optimizer.zero_grad()
+            outputs = self.model(images)
+            loss = self.criterion(outputs, labels)
+
+            loss.backward()
+            self.optimizer.step()
+
+            running_loss += loss.item()
+            predictions = (torch.sigmoid(outputs) > 0.5).float()
+            correct += (predictions == labels).sum().item()
+            total += labels.size(0)
+
+        train_accuracy = 100 * correct / total
+        return running_loss / len(self.train_loader), train_accuracy
+
+    def validate(self):
+        self.model.eval()
+        val_loss = 0.0
+        val_correct = 0
+        val_total = 0
+
+        with torch.no_grad():
+            for images, labels in self.val_loader:
+                images, labels = images.to(self.device), labels.to(self.device).float().unsqueeze(1)
+                outputs = self.model(images)
+                loss = self.criterion(outputs, labels)
+
+                val_loss += loss.item()
+                predictions = (torch.sigmoid(outputs) > 0.5).float()
+                val_correct += (predictions == labels).sum().item()
+                val_total += labels.size(0)
+
+        val_accuracy = 100 * val_correct / val_total
+        return val_loss / len(self.val_loader), val_accuracy
+
+    def save_best_model(self, val_acc, epoch, loss):
+
+        if val_acc > self.best_val_acc:
+            self.best_val_acc = val_acc
+            torch.save({
+                'epoch': epoch + 1,
+                'model_state_dict': self.model.state_dict(),
+                'optimizer_state_dict': self.optimizer.state_dict(),
+                'best_val_acc': self.best_val_acc,
+                'loss': loss
+            }, self.save_path)
+
+            print("New best model saved")
+
+    def load_best_model(self):
+        if os.path.exists(self.save_path):
+            checkpoint = torch.load(self.save_path, map_location=self.device)
+            self.model.load_state_dict(checkpoint['model_state_dict'])
+            self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+            self.start_epoch = checkpoint['epoch']
+            self.best_val_acc = checkpoint['best_val_acc']
+            print(f"Best model loaded. Proceeding from epoch {self.start_epoch}")
+        else:
+            print("No saved model found, training from scratch")
+
+
+import json
+
+def oku_etiketler(json_yolu):
+    with open(json_yolu, 'r') as f:
+        data = json.load(f)
+
+    label_map = {}  # "50479238.0.31.png": "HiperakutAkut"
+    for kayit in data:
+        image_id = kayit["ImageId"]
+        etiket = kayit["LessionTypeName"]
+        label_map[image_id] = etiket
+
+    return label_map
+
+
+def kodla_etiketler(label_map):
+    # Etiket isimlerinden sınıf indeksleri oluştur
+    etiket_seti = sorted(set(label_map.values()))
+    etiket_to_index = {etiket: i for i, etiket in enumerate(etiket_seti)}
+
+    # Sayısal etiket sözlüğü
+    label_index_map = {img: etiket_to_index[label_map[img]] for img in label_map}
+
+    return label_index_map, etiket_to_index
+
+
+import os
+from PIL import Image
+from torch.utils.data import Dataset
+
+class CustomImageDataset(Dataset):
+    def __init__(self, image_dir, label_map, transform=None):
+        self.image_dir = image_dir
+        self.label_map = label_map
+        self.transform = transform
+
+        self.image_files = [f for f in os.listdir(image_dir) if f in label_map]
+
+    def __len__(self):
+        return len(self.image_files)
+
+    def __getitem__(self, idx):
+        img_name = self.image_files[idx]
+        img_path = os.path.join(self.image_dir, img_name)
+
+        image = Image.open(img_path).convert("L")  # grayscale
+
+        if self.transform:
+            image = self.transform(image)
+
+        label = self.label_map[img_name]
+        return image, label
+
+
 
 if __name__ == '__main__':
 
+
     print(torch.version.cuda)
     print(torch.backends.cudnn.enabled)
-    print("Program başladı")
-    transform = transforms.Compose([transforms.Grayscale(num_output_channels=1),transforms.ToTensor()])
-
-    train_dataset = datasets.ImageFolder(root="C:\\Users\\Agah\\Desktop\\son_veriler\\train",transform=transform)
-    test_dataset = datasets.ImageFolder(root="C:\\Users\\Agah\\Desktop\\son_veriler\\test", transform=transform)
-    val_dataset = datasets.ImageFolder(root="C:\\Users\\Agah\\Desktop\\son_veriler\\validation", transform=transform)
 
 
-    train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=16,shuffle=True,num_workers=4)
-    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=False)
-    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=False)
-    print("Veriler yüklendi")
+    transform = transforms.Compose([
+        transforms.Grayscale(num_output_channels=1),
+        transforms.ToTensor()
+    ])
+
+    # JSON yolu
+    json_yolu = r"C:\Users\Agah\Desktop\etiketler.json"
+
+    # Etiketleri oku ve sayısallaştır
+    label_map_str = oku_etiketler(json_yolu)
+    label_map_int, etiket_to_index = kodla_etiketler(label_map_str)
+
+    print("Etiket sınıfları:", etiket_to_index)
+
+    # Dataset ve loader'lar
+    train_dataset = CustomImageDataset(
+        r"C:\Users\Agah\Desktop\ayrilmis_veriler\train",
+        label_map_int,
+        transform
+    )
+    val_dataset = CustomImageDataset(
+        r"C:\Users\Agah\Desktop\ayrilmis_veriler\val",
+        label_map_int,
+        transform
+    )
+    test_dataset = CustomImageDataset(
+        r"C:\Users\Agah\Desktop\ayrilmis_veriler\test",
+        label_map_int,
+        transform
+    )
+
+    train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4)
+    val_loader = DataLoader(val_dataset, batch_size=16, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
+
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    model = EfficientNet.from_name('efficientnet-b2', in_channels=1)
-
-    num_ftrs = model._fc.in_features
-    model._fc = nn.Sequential(nn.Dropout(0.5), nn.Linear(num_ftrs, 1)
-    )
-    model._fc = nn.Linear(num_ftrs, 1)
-
-
+    model = EfficientNet.from_name('efficientnet-b7', in_channels=1)
 
     model = model.to(device)
     if(torch.cuda.is_available()):
@@ -432,107 +610,7 @@ if __name__ == '__main__':
 
 
     criterion = nn.BCEWithLogitsLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.0001)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-
-    def train(model, train_loader, val_loader, optimizer, criterion, epochs=30,
-              checkpoint_path="C:\\Users\\Agah\\PycharmProjects\\Agah-StrokeClassification\\EfficientNet\\runs\\efficientnet_b4_checkpoint2.pth"
-):
-        #checkpoint_path = "C:\\Users\\Agah\\PycharmProjects\\Agah-StrokeClassification\\EfficientNet\\runs\\efficientnet_b4_checkpoint2.pth"
-        """checkpoint = torch.load(checkpoint_path, map_location=device)
-        model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])"""
-
-        for epoch in range(epochs):
-            print(f"Epoch {epoch+1} başladı")
-            model.train()
-
-            running_loss = 0.0
-            correct, total = 0, 0
-
-            for images, labels in train_loader:
-                images, labels = images.to(device), labels.to(device)
-                labels = labels.float()
-
-                optimizer.zero_grad()
-                outputs = model(images)
-                loss = criterion(outputs, labels.view(-1, 1))
-                loss.backward()
-                optimizer.step()
-
-                running_loss += loss.item()
-                predicted = (torch.sigmoid(outputs) > 0.5).long()
-                total += labels.size(0)
-                correct += (predicted.view(-1) == labels.view(-1)).sum().item()
-            train_acc = 100 * correct / total
-            val_acc = evaluate(model, val_loader)
-
-            print(f"Epoch {epoch + 1}, Loss: {running_loss:.4f}, Train Acc: {train_acc:.2f}%, Val Acc: {val_acc:.2f}%")
-
-            torch.save({
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'loss': loss
-            }, checkpoint_path)
-            print(f"Checkpoint kaydedildi: {checkpoint_path}")
-
-
-
-
-
-    def evaluate(model, val_loader):
-
-
-        model.eval()
-        correct, total = 0, 0
-
-        with torch.no_grad():
-            for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device)
-
-                outputs = model(images)
-                predicted = (torch.sigmoid(outputs) > 0.5).long()
-                total += labels.size(0)
-                correct += (predicted.view(-1) == labels.view(-1)).sum().item()
-        return 100 * correct / total
-
-
-    model.to(device)
-    def test_model(model, test_loader, device):
-        model.eval()
-        all_predictions = []
-        all_labels = []
-
-        with torch.no_grad():
-            for images, labels in test_loader:
-                images = images.to(device)
-                labels = labels.to(device)
-
-                labels = labels.float()
-
-                outputs = model(images)
-
-                probabilities = torch.sigmoid(outputs)
-                predictions = (probabilities > 0.5).long()
-
-                all_predictions.extend(predictions.cpu().numpy())
-                all_labels.extend(labels.cpu().numpy())
-
-
-        return all_predictions, all_labels
-
-    pt_path = "C:\\Users\\Agah\\PycharmProjects\\Agah-StrokeClassification\\EfficientNet\\runs\\efficientnet_b4_checkpoint2.pth"
-    checkpoint = torch.load(pt_path, map_location=device)
-    model.load_state_dict(checkpoint['model_state_dict'],strict=False)
-
-    print(type(model))
-    predictions, labels = test_model(model, test_loader, device)
-    accuracy = accuracy_score(labels, predictions)
-    print(f"Test Doğruluğu: {accuracy:.4f}")
-    f1 = f1_score(labels, predictions, average='weighted')
-    print(f"f1 skoru ->{f1}")
-
-
-    #train(model, train_loader, val_loader,optimizer, criterion,epochs=10)
-
+    epochs = 30
+    Trainer.train(epochs)

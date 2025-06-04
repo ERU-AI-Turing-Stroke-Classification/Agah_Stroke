@@ -170,3 +170,18 @@ if __name__ == '__main__':
     best_trial = study.best_trial
     print(f"  Value: {best_trial.value}")
     print(f"  Params: {best_trial.params}")
+
+
+"""
+Test Accuracy: 61.50%
+Test F1 Score: 0.3927
+
+Sınıf Bazlı Performans:
+              precision    recall  f1-score   support
+
+           0     0.6387    0.9385    0.7601       130
+           1     0.1111    0.0143    0.0253        70
+
+    accuracy                         0.6150       200
+   macro avg     0.3749    0.4764    0.3927       200
+weighted avg     0.4541    0.6150    0.5029       200"""

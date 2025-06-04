@@ -22,7 +22,7 @@ transform = transforms.Compose([
 
 # **Dataset ve DataLoader**
 train_dataset = ImageFolder(root=r"C:\Users\Agah\Desktop\son_veriler\train", transform=transform)
-val_dataset = ImageFolder(root=r"C:\Users\Agah\Desktop\son_veriler\validation", transform=transform)
+val_dataset = ImageFolder(root=r"C:\Users\Agah\Desktop\son_veriler\validation_2", transform=transform)
 test_dataset = ImageFolder(root=r"C:\Users\Agah\Desktop\son_veriler\test", transform=transform)
 
 train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
@@ -101,7 +101,7 @@ def train_or_validate(model, dataloader, criterion, optimizer=None):
 
 
     return avg_loss, accuracy
-
+"""
 # **Eğitim Döngüsü**
 epochs = 50
 for epoch in range(start_epoch, epochs):
@@ -126,7 +126,7 @@ for epoch in range(start_epoch, epochs):
         best_accuracy = val_accuracy
         torch.save(model.state_dict(), best_model_path)
         print("Yeni en iyi model kaydedildi!")
-
+"""
 # **Test Aşaması**
 print("\nTest Verisi ile Modeli Değerlendiriyoruz...")
 test_loss, test_accuracy = train_or_validate(model, test_loader, criterion)

@@ -2,48 +2,41 @@ import os
 import shutil
 import random
 
-# Ana veri klasörü
-source_dir = r"C:\Users\Agah\Desktop\deneme_teknofest_veriler"  # Burada "inme_var" ve "inme_yok" klasörleri var
+kaynak_klasor = r"C:\Users\Agah\Desktop\tum_veriler"     # Tüm verilerin bulunduğu klasör
+hedef_klasor = r"C:\Users\Agah\Desktop\ayrilmis_veriler" # Verilerin ayrılacağı klasör
 
-# Hedef klasörler
-output_dir = r"C:\Users\Agah\Desktop\deneme_teknofest"  # Yeni klasör oluşturulacak
-train_dir = os.path.join(output_dir, "train")
-val_dir = os.path.join(output_dir, "validation")
-test_dir = os.path.join(output_dir, "test")
-
-# Eğitim, doğrulama ve test oranları
 train_ratio = 0.7
 val_ratio = 0.15
 test_ratio = 0.15
 
-# Klasörleri oluştur
-for category in ["inme_var", "inme_yok"]:
-    os.makedirs(os.path.join(train_dir, category), exist_ok=True)
-    os.makedirs(os.path.join(val_dir, category), exist_ok=True)
-    os.makedirs(os.path.join(test_dir, category), exist_ok=True)
+# Hedef klasörleri oluştur
+for alt in ["train", "val", "test"]:
+    os.makedirs(os.path.join(hedef_klasor, alt), exist_ok=True)
 
-# Verileri her kategori için ayır
-for category in ["inme_var", "inme_yok"]:
-    category_path = os.path.join(source_dir, category)
-    images = [f for f in os.listdir(category_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
+# Dosya listesini al ve karıştır
+tum_dosyalar = [f for f in os.listdir(kaynak_klasor) if os.path.isfile(os.path.join(kaynak_klasor, f))]
+random.shuffle(tum_dosyalar)
 
-    random.shuffle(images)  # Rastgele sırala
+# Bölme indeksleri
+toplam = len(tum_dosyalar)
+train_end = int(toplam * train_ratio)
+val_end = train_end + int(toplam * val_ratio)
 
-    train_count = int(len(images) * train_ratio)
-    val_count = int(len(images) * val_ratio)
+# Split işlemi
+train_dosyalar = tum_dosyalar[:train_end]
+val_dosyalar = tum_dosyalar[train_end:val_end]
+test_dosyalar = tum_dosyalar[val_end:]
 
-    train_files = images[:train_count]
-    val_files = images[train_count:train_count + val_count]
-    test_files = images[train_count + val_count:]
+# Kopyalama fonksiyonu
+def kopyala(dosya_listesi, hedef_klasor_adi):
+    for dosya in dosya_listesi:
+        kaynak_yol = os.path.join(kaynak_klasor, dosya)
+        hedef_yol = os.path.join(hedef_klasor, hedef_klasor_adi, dosya)
+        shutil.copy2(kaynak_yol, hedef_yol)
 
-    # Dosyaları yeni konumlarına taşı
-    for file in train_files:
-        shutil.move(os.path.join(category_path, file), os.path.join(train_dir, category, file))
+# Dosyaları ilgili klasörlere kopyala
+kopyala(train_dosyalar, "train")
+kopyala(val_dosyalar, "val")
+kopyala(test_dosyalar, "test")
 
-    for file in val_files:
-        shutil.move(os.path.join(category_path, file), os.path.join(val_dir, category, file))
-
-    for file in test_files:
-        shutil.move(os.path.join(category_path, file), os.path.join(test_dir, category, file))
-
-print("Veriler başarıyla ayrıldı!")
+print("Veriler başarıyla train/val/test olarak ayrıldı.")

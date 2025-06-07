@@ -5,11 +5,83 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc9700a3-9668-41eb-b25e-33234c9d0c0b" name="Changes" comment=".">
+      <change afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_27/checkpoints/epoch=29-step=5790.ckpt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_27/metrics.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_28/checkpoints/epoch=29-step=5790.ckpt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_28/metrics.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EfficientNet/WindowNet/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EfficientNet/WindowNet/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EfficientNet/runs/efficientnet_b4_checkpoint.pth" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/EfficientNet/runs/efficientnet_b4_checkpoint2.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_1/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_1/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_10/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_10/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_11/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_11/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_12/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_12/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_13/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_13/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_14/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_14/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_15/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_15/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_16/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_16/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_17/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_17/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_18/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_18/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_19/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_19/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_19/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_2/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_2/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_20/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_20/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_20/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_21/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_21/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_21/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_22/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_22/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_22/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_23/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_23/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_23/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_24/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_24/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_24/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_25/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_25/hparams.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_27/hparams.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_25/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_26/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_27/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_26/hparams.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_28/hparams.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_26/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_27/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_28/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_27/hparams.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_29/hparams.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_27/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_28/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/lightning_logs/version_29/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_28/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_28/metrics.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_29/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_29/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_3/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_3/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_4/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_4/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_5/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_5/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_6/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_6/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_7/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_7/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_8/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_8/hparams.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_9/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lightning_logs/version_9/hparams.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,11 +164,11 @@
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\VGG-19" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\EfficientNet\WindowNet" />
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification" />
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\ResNet\Teknofest_21" />
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\ResNet" />
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\VGG-19" />
-      <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\DenseNet" />
     </key>
   </component>
   <component name="RunManager">
@@ -191,7 +263,8 @@
       <workItem from="1748768715843" duration="19602000" />
       <workItem from="1748936358726" duration="1284000" />
       <workItem from="1748937663930" duration="35703000" />
-      <workItem from="1749294037190" duration="5238000" />
+      <workItem from="1749294037190" duration="7482000" />
+      <workItem from="1749322403396" duration="4668000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <option name="closed" value="true" />
@@ -230,7 +303,7 @@
     <SUITE FILE_PATH="coverage/best_model_1__pth$vit2.coverage" NAME="vit2 Coverage Results" MODIFIED="1748937670370" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT" />
     <SUITE FILE_PATH="coverage/best_model_1__pth$transportation.coverage" NAME="transportation Coverage Results" MODIFIED="1748967801746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50_cbam_lab.coverage" NAME="resnet50-cbam_lab Coverage Results" MODIFIED="1742490014388" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
-    <SUITE FILE_PATH="coverage/best_model_1__pth$main.coverage" NAME="main Coverage Results" MODIFIED="1749316357880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/EfficientNet/WindowNet" />
+    <SUITE FILE_PATH="coverage/best_model_1__pth$main.coverage" NAME="main Coverage Results" MODIFIED="1749325350868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/EfficientNet/WindowNet" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vit_cnn.coverage" NAME="vit-cnn Coverage Results" MODIFIED="1740261058621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT-CNN" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$turning.coverage" NAME="turning Coverage Results" MODIFIED="1740058303606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50.coverage" NAME="resnet50 Coverage Results" MODIFIED="1741262995216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />

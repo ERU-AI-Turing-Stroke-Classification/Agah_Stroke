@@ -9,3 +9,4 @@ model:
 data:
   batch_size: 8
   num_workers: 4
+ckpt_path: C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\EfficientNet\WindowNet\lightning_logs\version_30\checkpoints\best-epoch=26-F1_val=0.0000.ckpt

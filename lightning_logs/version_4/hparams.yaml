@@ -1,10 +1,10 @@
 _instantiator: pytorch_lightning.cli.instantiate_module
 classes: 14
-dropout: 0
+dropout: 0.3
 freeze_classifier: false
 freeze_window: false
 learn_window: false
-learning_rate: 0.001
+learning_rate: 0.0001
 levels: null
 optim: adam
 patience: 10

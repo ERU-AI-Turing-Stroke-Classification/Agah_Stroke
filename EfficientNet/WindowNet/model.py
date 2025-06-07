@@ -9,6 +9,7 @@ from torchvision.models import densenet121
 from torchvision import transforms as T
 from sklearn.metrics import f1_score
 from sklearn.metrics import classification_report
+from pytorch_lightning.callbacks import ModelCheckpoint
 
 
 class ConvWindow(nn.Module):
@@ -288,47 +289,51 @@ class Model(pl.LightningModule):
                 print(f"Saving predictions in {filename}")
                 torch.save(kwargs, filename)
 
-
     def test_step(self, batch, batch_idx):
-        return self._step(batch, batch_idx)
+        x, y, _ = batch  # index'i '_' ile alıyoruz çünkü kullanılmıyor
+        logits = self(x)
+        probs = torch.softmax(logits, dim=1)
+        return {"probs": probs.detach(), "labels": y.detach()}
 
     def test_step_end(self, outputs):
         self.log("loss/test", outputs["loss"], prog_bar=True, on_step=True, on_epoch=True)
         return outputs
 
+    def on_test_start(self):
+        self.test_outputs = []  # sıfırla
 
+    def on_test_batch_end(self, outputs, batch, batch_idx, dataloader_idx=0):
+        self.test_outputs.append(outputs)
 
-    def test_epoch_end(self, outputs):
+    def on_test_epoch_end(self):
+        outputs = self.test_outputs
+
         probs = torch.vstack([o["probs"] for o in outputs]).cpu()
         labels = torch.cat([o["labels"] for o in outputs], dim=0).cpu()
 
         preds = torch.argmax(probs, dim=1)
 
-        # F1
+        # F1 skoru
         f1 = f1_score(labels.numpy(), preds.numpy(), average="weighted")
         self.log("F1/test", f1, prog_bar=True, on_epoch=True)
 
-        # 👇 Sınıf sınıf precision, recall, f1-score hesapla
+        # sınıf sınıf metrik
         report = classification_report(labels.numpy(), preds.numpy(), output_dict=True)
-
-        # Her sınıf için precision, recall, f1-score logla
         for cls, metrics in report.items():
             if cls in ["accuracy", "macro avg", "weighted avg"]:
-                continue  # opsiyonel: sadece sınıf metriklerini loglamak istiyorsanız
+                continue
             self.log(f"Precision/test_class_{cls}", metrics["precision"], on_epoch=True)
             self.log(f"Recall/test_class_{cls}", metrics["recall"], on_epoch=True)
             self.log(f"F1/test_class_{cls}", metrics["f1-score"], on_epoch=True)
 
-        # Opsiyonel: metrikleri txt veya json olarak kaydet
+        # JSON kaydı
         if hasattr(self.logger, "log_dir"):
             import json
+            from pathlib import Path
             report_path = Path(self.logger.log_dir) / f"classification_report_epoch_{self.current_epoch}.json"
             with open(report_path, "w") as f:
                 json.dump(report, f, indent=4)
             print(f"Saved classification report to {report_path}")
-
-        # ROC AUC vs log_prediction çağrısı
-        self._epoch_end(outputs, "test")
 
     def configure_optimizers(self):
         if self.hparams.optim == "sgd":
@@ -344,3 +349,17 @@ class Model(pl.LightningModule):
                      "lr_scheduler": {"scheduler": self.scheduler,
                                       "monitor": "loss/val_epoch"}})
         return optimizer
+
+    def configure_callbacks(self):
+        from pytorch_lightning.callbacks import ModelCheckpoint
+
+        return [
+            ModelCheckpoint(
+                monitor="F1/val",  # log'ladığın metrik adı
+                mode="max",  # metrik yüksekse daha iyi
+                save_top_k=1,  # sadece en iyi modeli kaydet
+                filename="checkpoint",
+                save_weights_only=False,
+            )
+        ]
+

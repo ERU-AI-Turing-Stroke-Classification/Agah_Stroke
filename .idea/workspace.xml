@@ -5,23 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc9700a3-9668-41eb-b25e-33234c9d0c0b" name="Changes" comment=".">
-      <change afterPath="$PROJECT_DIR$/Data_Manipulation/json_changing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EfficientNet/b2_deneme.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EfficientNet/b2_deneme2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EfficientNet/b7_deneme.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ViT/vit2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_Manipulation/train_test_val_split.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Manipulation/train_test_val_split.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_Manipulation/transportation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_Manipulation/transportation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EfficientNet/B2.py" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/B7.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EfficientNet/WindowNet/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EfficientNet/WindowNet/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/EfficientNet/WindowNet/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EfficientNet/runs/efficientnet_b4_checkpoint.pth" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/EfficientNet/runs/efficientnet_b4_checkpoint2.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ResNet/resnet50-cbam_lab.py" beforeDir="false" afterPath="$PROJECT_DIR$/ResNet/resnet50-cbam_lab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VGG-19/vgg-19.py" beforeDir="false" afterPath="$PROJECT_DIR$/VGG-19/vgg-19.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,44 +49,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python tests.Doctests in B7.executor": "Run",
-    "Python.DenseNet.executor": "Run",
-    "Python.Noise.executor": "Run",
-    "Python.b2_deneme.executor": "Run",
-    "Python.b2_deneme2.executor": "Run",
-    "Python.b7_deneme.executor": "Run",
-    "Python.demo.executor": "Run",
-    "Python.graphics.executor": "Run",
-    "Python.json_changing.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.reshaping.executor": "Run",
-    "Python.resnet50-cbam.executor": "Run",
-    "Python.resnet50-cbam_lab.executor": "Run",
-    "Python.resnet50-cbam_tahsin.executor": "Run",
-    "Python.resnet50.executor": "Run",
-    "Python.roi.executor": "Run",
-    "Python.train_test_val_split.executor": "Run",
-    "Python.transportation.executor": "Run",
-    "Python.turning.executor": "Run",
-    "Python.vgg-19.executor": "Run",
-    "Python.vgg-19_tahsin.executor": "Run",
-    "Python.vit-cnn.executor": "Run",
-    "Python.vit.executor": "Run",
-    "Python.vit2.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/Agah/PycharmProjects/Agah-StrokeClassification",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python tests.Doctests in B7.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DenseNet.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Noise.executor&quot;: &quot;Run&quot;,
+    &quot;Python.b2_deneme.executor&quot;: &quot;Run&quot;,
+    &quot;Python.b2_deneme2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.b7_deneme.executor&quot;: &quot;Run&quot;,
+    &quot;Python.demo.executor&quot;: &quot;Run&quot;,
+    &quot;Python.graphics.executor&quot;: &quot;Run&quot;,
+    &quot;Python.json_changing.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.reshaping.executor&quot;: &quot;Run&quot;,
+    &quot;Python.resnet50-cbam.executor&quot;: &quot;Run&quot;,
+    &quot;Python.resnet50-cbam_lab.executor&quot;: &quot;Run&quot;,
+    &quot;Python.resnet50-cbam_tahsin.executor&quot;: &quot;Run&quot;,
+    &quot;Python.resnet50.executor&quot;: &quot;Run&quot;,
+    &quot;Python.roi.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train_test_val_split.executor&quot;: &quot;Run&quot;,
+    &quot;Python.transportation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.turning.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vgg-19.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vgg-19_tahsin.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vit-cnn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vit.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vit2.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Agah/PycharmProjects/Agah-StrokeClassification&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Agah\PycharmProjects\Agah-StrokeClassification\VGG-19" />
@@ -203,6 +191,7 @@
       <workItem from="1748768715843" duration="19602000" />
       <workItem from="1748936358726" duration="1284000" />
       <workItem from="1748937663930" duration="35703000" />
+      <workItem from="1749294037190" duration="5238000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <option name="closed" value="true" />
@@ -241,7 +230,7 @@
     <SUITE FILE_PATH="coverage/best_model_1__pth$vit2.coverage" NAME="vit2 Coverage Results" MODIFIED="1748937670370" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT" />
     <SUITE FILE_PATH="coverage/best_model_1__pth$transportation.coverage" NAME="transportation Coverage Results" MODIFIED="1748967801746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50_cbam_lab.coverage" NAME="resnet50-cbam_lab Coverage Results" MODIFIED="1742490014388" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />
-    <SUITE FILE_PATH="coverage/best_model_1__pth$main.coverage" NAME="main Coverage Results" MODIFIED="1748972313307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/EfficientNet/WindowNet" />
+    <SUITE FILE_PATH="coverage/best_model_1__pth$main.coverage" NAME="main Coverage Results" MODIFIED="1749316357880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/EfficientNet/WindowNet" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$vit_cnn.coverage" NAME="vit-cnn Coverage Results" MODIFIED="1740261058621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ViT-CNN" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$turning.coverage" NAME="turning Coverage Results" MODIFIED="1740058303606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data_Manipulation" />
     <SUITE FILE_PATH="coverage/Agah_StrokeClassification$resnet50.coverage" NAME="resnet50 Coverage Results" MODIFIED="1741262995216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ResNet" />

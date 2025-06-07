@@ -8,6 +8,7 @@ from sklearn.metrics import roc_auc_score
 from torchvision.models import densenet121
 from torchvision import transforms as T
 from sklearn.metrics import f1_score
+from sklearn.metrics import classification_report
 
 
 class ConvWindow(nn.Module):
@@ -295,14 +296,38 @@ class Model(pl.LightningModule):
         self.log("loss/test", outputs["loss"], prog_bar=True, on_step=True, on_epoch=True)
         return outputs
 
+
+
     def test_epoch_end(self, outputs):
         probs = torch.vstack([o["probs"] for o in outputs]).cpu()
         labels = torch.cat([o["labels"] for o in outputs], dim=0).cpu()
 
         preds = torch.argmax(probs, dim=1)
+
+        # F1
         f1 = f1_score(labels.numpy(), preds.numpy(), average="weighted")
         self.log("F1/test", f1, prog_bar=True, on_epoch=True)
 
+        # 👇 Sınıf sınıf precision, recall, f1-score hesapla
+        report = classification_report(labels.numpy(), preds.numpy(), output_dict=True)
+
+        # Her sınıf için precision, recall, f1-score logla
+        for cls, metrics in report.items():
+            if cls in ["accuracy", "macro avg", "weighted avg"]:
+                continue  # opsiyonel: sadece sınıf metriklerini loglamak istiyorsanız
+            self.log(f"Precision/test_class_{cls}", metrics["precision"], on_epoch=True)
+            self.log(f"Recall/test_class_{cls}", metrics["recall"], on_epoch=True)
+            self.log(f"F1/test_class_{cls}", metrics["f1-score"], on_epoch=True)
+
+        # Opsiyonel: metrikleri txt veya json olarak kaydet
+        if hasattr(self.logger, "log_dir"):
+            import json
+            report_path = Path(self.logger.log_dir) / f"classification_report_epoch_{self.current_epoch}.json"
+            with open(report_path, "w") as f:
+                json.dump(report, f, indent=4)
+            print(f"Saved classification report to {report_path}")
+
+        # ROC AUC vs log_prediction çağrısı
         self._epoch_end(outputs, "test")
 
     def configure_optimizers(self):

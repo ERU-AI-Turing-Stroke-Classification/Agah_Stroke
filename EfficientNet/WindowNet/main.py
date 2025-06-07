@@ -9,6 +9,7 @@ from pytorch_lightning.cli import LightningCLI
 from model import Model
 from data import DataModule
 
+#Kodu çalıştırmak için terminale şunu yazın (dosya yolunu değiştirerek): python main.py fit --config config.yaml
 
 #Kodun orijinalinde olan yapı (lightning kütüphanesi artık bunu kullanmıyormuş o yüzden kullanamıyoruz).
 """

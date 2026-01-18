@@ -1,1 +1,53 @@
-*.jpg
+# --- Python & ML ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+# Sanal Ortamlar (Bunları Linux'ta baştan kuracağız)
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# --- Java & JavaFX ---
+*.class
+# Mobil/Java derleme klasörleri
+bin/
+gen/
+out/
+target/
+.gradle/
+build/
+
+# --- IDE & Editör Ayarları (PyCharm, IntelliJ, VS Code) ---
+# Bu dosyalar kişisel ayarlarındır, repoda olmamalı.
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# --- İşletim Sistemi Dosyaları ---
+# Windows thumbnail dosyaları
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# Mac (Olur da bir gün Mac'ten dosya gelirse)
+.DS_Store
+
+# --- Veri ve Modeller (ÖNEMLİ!) ---
+# Büyük veri setlerini ve eğitilmiş devasa modelleri GitHub'a atma (100MB sınırı var).
+# Bunları genellikle ayrı klasörde tutup ignore ederiz.
+*.csv
+*.xlsx
+data/
+datasets/
+models/
+*.h5
+*.pth
+*.pt
